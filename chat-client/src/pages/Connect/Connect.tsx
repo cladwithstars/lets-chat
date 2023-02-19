@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import io, { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 interface Props {
@@ -8,11 +7,13 @@ interface Props {
 }
 
 const Connect: React.FC<Props> = ({ setUsername }) => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
 
   const handleSubmitName = (e: any) => {
     e.preventDefault();
     setUsername(name);
+    navigate("/chatroom");
   };
 
   return (

@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import useChatRoom from "../../hooks/useChatRoom";
+import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
-import io, { Socket } from "socket.io-client";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 interface Props {
-  name: string;
+  name: string | null;
 }
 
 interface Message {
@@ -14,13 +14,21 @@ interface Message {
 }
 
 const Chat: React.FC<Props> = ({ name }) => {
-  const { socket, messages, userCount } = useChatRoom(name);
+  const navigate = useNavigate();
+
+  const { socket, messages, userCount, handleLeave } = useChatRoom(name);
   const [inputValue, setInputValue] = useState<string>("");
   const chatRoomRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!name) {
+      socket?.disconnect();
+      navigate("/");
+    }
+  }, [name]);
+
   const scrollToBottom = () => {
     if (chatRoomRef && chatRoomRef.current) {
-      console.log("scrolling");
       chatRoomRef.current.scrollTo({
         top: chatRoomRef.current.scrollHeight,
         behavior: "smooth",
@@ -41,28 +49,25 @@ const Chat: React.FC<Props> = ({ name }) => {
     }
   };
 
-  const handleLeave = () => {
-    if (socket) {
-      socket.emit("user disconnected", name, () => {
-        setTimeout(() => {
-          if (socket.connected) {
-            socket.disconnect();
-          }
-        }, 5000); // wait 5 seconds before disconnecting
-      });
-    }
-  };
-
   return (
     <div className="container">
-      <p>Num users in room: {userCount}</p>
+      <p>Welcome, {name}</p>
+      <p>Room size: {userCount}</p>
       <div className="messages" ref={chatRoomRef}>
-        {messages.map((message, index) => (
-          <div key={index} className="message">
-            <div className="message-header">{message.name}</div>
-            <div className="message-body">{message.message}</div>
-          </div>
-        ))}
+        {messages.map((message, index) => {
+          const { name, type } = message;
+          console.log("message: ", message);
+          const msgClassName = clsx("message-body", {
+            "connect-msg": type === "connected",
+            "disconnect-msg": type === "disconnected",
+          });
+          return (
+            <div key={index} className="message">
+              <div className="message-header">{message.name}</div>
+              <div className={msgClassName}>{message.message}</div>
+            </div>
+          );
+        })}
       </div>
       <div className="input-container">
         <form onSubmit={sendMessage}>
@@ -74,11 +79,10 @@ const Chat: React.FC<Props> = ({ name }) => {
           <button className="button" type="submit">
             Send
           </button>
+          <button className="button button-red" onClick={handleLeave}>
+            Leave
+          </button>
         </form>
-        <button className="button" onClick={handleLeave}>
-          Leave
-        </button>
-        <div>{name}</div>
       </div>
     </div>
   );

@@ -9,33 +9,54 @@ const io = require("socket.io")(http, {
 });
 
 const messages = [];
-const users = [];
+const users = {};
 
 io.on("connection", (socket) => {
   socket.emit("allMessages", messages);
 
+  socket.on("disconnect", () => {
+    const name = users[socket.id];
+    delete users[socket.id];
+    io.emit("userCount", Object.keys(users).length);
+    socket.broadcast.emit(
+      "message",
+      JSON.stringify({ name, message: "disconnected.", type: "disconnected" })
+    );
+  });
+
   socket.on("user connected", (name) => {
-    users.push(name);
-    io.emit("userCount", users.length);
+    users[socket.id] = name;
+    io.emit("userCount", Object.keys(users).length);
     socket.broadcast.emit(
       "message",
-      JSON.stringify({ name, message: "connected." })
+      JSON.stringify({ name, message: "connected.", type: "connected" })
     );
   });
 
-  socket.on("user disconnected", (name) => {
-    users.splice(users.indexOf(name), 1);
-    io.emit("userCount", users.length);
+  socket.on("connect", (name) => {
+    users[socket.id] = name;
+    io.emit("userCount", Object.keys(users).length);
     socket.broadcast.emit(
       "message",
-      JSON.stringify({ name, message: "disconnected." })
+      JSON.stringify({ name, message: "connected.", type: "connected" })
     );
   });
 
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", JSON.stringify({ name, message }));
+  socket.on("message", ({ message }) => {
+    const name = users[socket.id];
+    io.emit("message", JSON.stringify({ name, message, type: "msg" }));
   });
 });
+
+// socket.on("user disconnected", () => {
+//   const name = users[socket.id];
+//   delete users[socket.id];
+//   io.emit("userCount", Object.keys(users).length);
+//   socket.broadcast.emit(
+//     "message",
+//     JSON.stringify({ name, message: "disconnected." })
+//   );
+// });
 
 http.listen(3000, () => {
   console.log("listening on *:3000");
