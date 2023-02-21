@@ -58,6 +58,14 @@ io.on("connection", (socket) => {
 //   );
 // });
 
+// serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  app.use("", express.static(__dirname + "/client/build/"));
+  app.get("*", (req, res) => {
+    res.sendFile(__dirname + "/client/build/index.html");
+  });
+}
+
 const port =
   process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 3000;
 
