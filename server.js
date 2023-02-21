@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
 if (process.env.NODE_ENV === "production") {
   app.use("", express.static(__dirname + "/chat-client/dist/"));
   app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/client/build/index.html");
+    res.sendFile(__dirname + "/chat-client/dist/index.html");
   });
 }
 
