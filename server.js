@@ -58,6 +58,9 @@ io.on("connection", (socket) => {
 //   );
 // });
 
-http.listen(3000, () => {
-  console.log("listening on *:3000");
+const port =
+  process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 3000;
+
+http.listen(port, () => {
+  console.log(`listening on *:${port}`);
 });
