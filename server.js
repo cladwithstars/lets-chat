@@ -50,9 +50,16 @@ io.on("connection", (socket) => {
 
 // serve static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use("/", express.static(__dirname + "/chat-client/dist/"));
+  const distPath = path.join(
+    __dirname,
+    "..",
+    "lets-chat",
+    "chat-client",
+    "dist"
+  );
+  app.use(express.static(distPath));
   app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/chat-client/dist/index.html");
+    res.sendFile(path.join(distPath, "index.html"));
   });
 }
 
