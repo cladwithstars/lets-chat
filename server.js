@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
 
 // serve static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use("", express.static(__dirname + "/chat-client/build/"));
+  app.use("", express.static(__dirname + "/chat-client/dist/"));
   app.get("*", (req, res) => {
     res.sendFile(__dirname + "/client/build/index.html");
   });
