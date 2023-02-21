@@ -48,19 +48,9 @@ io.on("connection", (socket) => {
   });
 });
 
-// socket.on("user disconnected", () => {
-//   const name = users[socket.id];
-//   delete users[socket.id];
-//   io.emit("userCount", Object.keys(users).length);
-//   socket.broadcast.emit(
-//     "message",
-//     JSON.stringify({ name, message: "disconnected." })
-//   );
-// });
-
 // serve static assets in production
 if (process.env.NODE_ENV === "production") {
-  app.use("", express.static(__dirname + "/chat-client/dist/"));
+  app.use("/", express.static(__dirname + "/chat-client/dist/"));
   app.get("*", (req, res) => {
     res.sendFile(__dirname + "/chat-client/dist/index.html");
   });
