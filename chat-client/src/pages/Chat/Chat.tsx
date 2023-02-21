@@ -42,6 +42,12 @@ const Chat: React.FC<Props> = ({ name }) => {
 
   const sendMessage = (e: any) => {
     e.preventDefault();
+    if (inputValue.length === 0) {
+      return;
+    }
+    if (inputValue.length > 10000) {
+      return;
+    }
     if (socket) {
       socket.emit("message", { message: inputValue, name });
       setInputValue("");
@@ -55,14 +61,23 @@ const Chat: React.FC<Props> = ({ name }) => {
       <p>Room size: {userCount}</p>
       <div className="messages" ref={chatRoomRef}>
         {messages.map((message, index) => {
-          const { name, type } = message;
-          console.log("message: ", message);
+          const { type } = message;
+          const isOwnMessage = name === message.name;
+          console.log("isOwnMessage ", isOwnMessage);
+          const msgContainerClass = clsx("message", {
+            left: !isOwnMessage,
+            right: isOwnMessage,
+          });
           const msgClassName = clsx("message-body", {
             "connect-msg": type === "connected",
             "disconnect-msg": type === "disconnected",
+            "own-message": isOwnMessage && type === "msg",
+            "other-message": !isOwnMessage && type === "msg",
+            "own-bubble": isOwnMessage && type === "msg",
+            "other-bubble": !isOwnMessage && type === "msg",
           });
           return (
-            <div key={index} className="message">
+            <div key={index} className={msgContainerClass}>
               <div className="message-header">{message.name}</div>
               <div className={msgClassName}>{message.message}</div>
             </div>
@@ -71,12 +86,18 @@ const Chat: React.FC<Props> = ({ name }) => {
       </div>
       <div className="input-container">
         <form onSubmit={sendMessage}>
-          <input
+          <textarea
             className="input"
             value={inputValue}
+            minLength={0}
+            maxLength={10000}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <button className="button" type="submit">
+          <button
+            className="button"
+            disabled={!inputValue || inputValue.length > 10000}
+            type="submit"
+          >
             Send
           </button>
           <button className="button button-red" onClick={handleLeave}>

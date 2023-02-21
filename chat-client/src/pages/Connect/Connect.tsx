@@ -27,7 +27,7 @@ const Connect: React.FC<Props> = ({ setUsername }) => {
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
         />
-        <button className="connect-button" type="submit">
+        <button className="connect-button" disabled={!name} type="submit">
           Join
         </button>
       </form>

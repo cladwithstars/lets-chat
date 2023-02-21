@@ -28,3 +28,8 @@
 .connect-button:hover {
   background-color: #1669e5;
 }
+
+.connect-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

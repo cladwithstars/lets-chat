@@ -24,6 +24,8 @@
   flex-direction: column;
   margin-bottom: 10px;
   max-width: 300px;
+  word-wrap: break-word;
+  max-width: 70%;
 }
 
 .message-header {
@@ -64,6 +66,11 @@
   background-color: #0069d9;
 }
 
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .button-red {
   background-color: red;
 }
@@ -78,4 +85,64 @@
 
 .connect-msg {
   color: green;
+}
+
+.own-message {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.own-bubble {
+  float: right;
+  background-color: #0275d8;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 60%;
+}
+
+.other-message {
+  text-align: left;
+}
+
+.other-bubble {
+  float: left;
+  background-color: #e9ecef;
+  color: black;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 60%;
+}
+
+.own-bubble {
+  display: inline-block;
+  float: right;
+  background-color: #0275d8;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 60%;
+}
+
+.other-bubble {
+  display: inline-block;
+  float: left;
+  background-color: #e9ecef;
+  color: black;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 60%;
+}
+
+.left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+button disabled {
 }
