@@ -43,6 +43,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+p {
+  color: black;
+}
+
 /* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
