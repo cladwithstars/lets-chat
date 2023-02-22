@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
@@ -9,6 +9,11 @@ interface Props {
 const Connect: React.FC<Props> = ({ setUsername }) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSubmitName = (e: any) => {
     e.preventDefault();
@@ -26,6 +31,7 @@ const Connect: React.FC<Props> = ({ setUsername }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
+          ref={inputRef}
         />
         <button className="connect-button" disabled={!name} type="submit">
           Join

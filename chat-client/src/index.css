@@ -38,7 +38,12 @@ h1 {
   line-height: 1.1;
 }
 
-@media (prefers-color-scheme: light) {
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -49,4 +54,4 @@ h1 {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
