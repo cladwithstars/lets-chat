@@ -15,7 +15,7 @@
   height: 400px;
   overflow-y: scroll;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 15px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -30,6 +30,11 @@
 
 .message-header {
   font-weight: bold;
+  display: flex;
+}
+
+.message-body {
+  text-align: left;
 }
 
 .input-container {
@@ -49,49 +54,6 @@
   padding: 5px 10px;
 }
 
-.button {
-  height: 30px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: none;
-  background-color: #007bff;
-  color: #fff;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  margin-left: 10px;
-}
-
-.button:hover {
-  background-color: #0069d9;
-}
-
-.button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.button-red {
-  background-color: red;
-}
-
-.button-red:hover {
-  background-color: #b22222;
-}
-
-.disconnect-msg {
-  color: red;
-}
-
-.connect-msg {
-  color: green;
-}
-
-.own-message {
-  text-align: right;
-  justify-content: flex-end;
-}
-
 .own-bubble {
   float: right;
   background-color: #0275d8;
@@ -101,12 +63,7 @@
   max-width: 60%;
 }
 
-.other-message {
-  text-align: left;
-}
-
 .other-bubble {
-  float: left;
   background-color: #e9ecef;
   color: black;
   padding: 20px;
@@ -116,7 +73,6 @@
 
 .own-bubble {
   display: inline-block;
-  float: right;
   background-color: #0275d8;
   color: white;
   padding: 20px;
@@ -144,5 +100,67 @@
   justify-content: flex-end;
 }
 
-button disabled {
+.button {
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: inherit;
+  border: 1px solid black;
+  color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-left: 10px;
+}
+
+.button:not([disabled]):hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-red {
+  background-color: red;
+}
+
+.disconnect-msg {
+  color: red;
+}
+
+.connect-msg {
+  color: green;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s ease-in-out;
+}
+
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+p {
+  margin: 0;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  /* background-color: #f7f7f7; */
+  /* border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); */
 }
