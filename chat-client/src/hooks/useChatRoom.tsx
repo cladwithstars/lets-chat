@@ -35,8 +35,14 @@ const useChatRoom = (name: string | null): ChatRoomState => {
     }
   };
 
+  const isProduction = process.env.NODE_ENV === "production";
+
+  const target = isProduction
+    ? "https://lets-chat.herokuapp.com"
+    : "http://localhost:3000";
+
   useEffect(() => {
-    const socket = io("http://localhost:3000");
+    const socket = io(target);
     setSocket(socket);
 
     socket.on("connect", () => {
