@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// serve static assets in production
+// serve static assets in productio
 if (process.env.NODE_ENV === "production") {
   app.use("/", express.static(__dirname + "/chat-client/dist/"));
   app.get("*", (req, res) => {
