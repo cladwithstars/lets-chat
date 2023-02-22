@@ -18,7 +18,7 @@ const Connect: React.FC<Props> = ({ setUsername }) => {
 
   return (
     <div className="connect-container">
-      <h1>Enter your name to join the chat</h1>
+      <h1>Let's Chat</h1>
       <form onSubmit={handleSubmitName}>
         <input
           className="connect-input"
