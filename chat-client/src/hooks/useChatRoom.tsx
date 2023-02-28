@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
-import { Message } from "../types";
+import { Message, User } from "../types";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
-
-interface User {
-  id: string;
-  name: string;
-}
 
 type ChatRoomState = {
   socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;

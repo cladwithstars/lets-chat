@@ -6,3 +6,8 @@ export interface Message {
   type: "msg" | "connected" | "disconnected";
   reactions: string[];
 }
+
+export interface User {
+  id: string;
+  name: string;
+}

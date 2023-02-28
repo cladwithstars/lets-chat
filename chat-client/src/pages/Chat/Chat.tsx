@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import useChatRoom from "../../hooks/useChatRoom";
 import Message from "../../components/Message/Message";
-import clsx from "clsx";
+import UsersModal from "../../components/UsersModal/UsersModal";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
@@ -15,6 +15,7 @@ const Chat: React.FC<Props> = ({ userName }) => {
   const { socket, messages, userList, handleLeave } = useChatRoom(userName);
   const [inputValue, setInputValue] = useState<string>("");
   const chatRoomRef = useRef<HTMLDivElement>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     if (!userName) {
@@ -64,14 +65,20 @@ const Chat: React.FC<Props> = ({ userName }) => {
 
   return (
     <React.Fragment>
+      <UsersModal
+        users={userList}
+        isOpen={modalIsOpen}
+        closeModal={() => setModalIsOpen(false)}
+      />
       <div className="container">
         <p>Welcome, {userName}</p>
-        <p>Room size: {userList.length}</p>
-        {userList && userList.length > 0 && (
-          <p>
-            Active users: {[...userList].map((user) => user.name).join(", ")}
-          </p>
-        )}
+        <p>
+          Room size: {userList.length} (
+          <button className="view-users" onClick={() => setModalIsOpen(true)}>
+            view
+          </button>
+          )
+        </p>
         <div className="messages" ref={chatRoomRef}>
           {messages.map((message, index) => {
             const { reactions } = message;
@@ -98,7 +105,6 @@ const Chat: React.FC<Props> = ({ userName }) => {
         <div className="input-container">
           <form onSubmit={sendMessage}>
             <textarea
-              className="input"
               value={inputValue}
               minLength={0}
               maxLength={10000}
