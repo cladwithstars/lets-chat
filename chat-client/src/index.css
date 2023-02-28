@@ -31,6 +31,7 @@ body {
   min-height: 100vh;
   background: linear-gradient(to right, rgb(242, 112, 156), rgb(255, 148, 114));
   font-family: "Montserrat", sans-serif;
+  color: black;
 }
 
 h1 {

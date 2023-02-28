@@ -183,3 +183,32 @@ p {
   background-color: #ffffff;
   border-radius: 10px;
 }
+
+.container {
+  display: flex;
+}
+
+.user-list {
+  width: 250px;
+  margin-right: 20px;
+}
+
+.user-list h4 {
+  margin: 0;
+}
+
+.user-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-list li {
+  margin-bottom: 5px;
+}
+
+.chat-room {
+  flex: 1;
+}
+
+/* Additional styling for the chat room... */

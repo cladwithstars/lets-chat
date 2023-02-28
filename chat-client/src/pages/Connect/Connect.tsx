@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 interface Props {
-  setUsername: React.Dispatch<React.SetStateAction<string | null>>;
+  setUserName: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const Connect: React.FC<Props> = ({ setUsername }) => {
+const Connect: React.FC<Props> = ({ setUserName }) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -17,7 +17,7 @@ const Connect: React.FC<Props> = ({ setUsername }) => {
 
   const handleSubmitName = (e: any) => {
     e.preventDefault();
-    setUsername(name);
+    setUserName(name);
     navigate("/chatroom");
   };
 
@@ -29,6 +29,8 @@ const Connect: React.FC<Props> = ({ setUsername }) => {
           className="connect-input"
           type="text"
           value={name}
+          minLength={1}
+          maxLength={10}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
           ref={inputRef}

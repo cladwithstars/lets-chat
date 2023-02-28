@@ -1,31 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useChatRoom from "../../hooks/useChatRoom";
+import Message from "../../components/Message/Message";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
 interface Props {
-  name: string | null;
+  userName: string | null;
 }
 
-interface Message {
-  name: string;
-  message: string;
-}
-
-const Chat: React.FC<Props> = ({ name }) => {
+const Chat: React.FC<Props> = ({ userName }) => {
   const navigate = useNavigate();
 
-  const { socket, messages, userCount, handleLeave } = useChatRoom(name);
+  const { socket, messages, userList, handleLeave } = useChatRoom(userName);
   const [inputValue, setInputValue] = useState<string>("");
   const chatRoomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!name) {
+    if (!userName) {
       socket?.disconnect();
       navigate("/");
     }
-  }, [name]);
+  }, [userName]);
 
   const scrollToBottom = () => {
     if (chatRoomRef && chatRoomRef.current) {
@@ -38,74 +34,90 @@ const Chat: React.FC<Props> = ({ name }) => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages.length]);
 
   const sendMessage = (e: any) => {
     e.preventDefault();
-    if (inputValue.length === 0) {
-      return;
-    }
-    if (inputValue.length > 10000) {
+    if (inputValue.length === 0 || inputValue.length > 10000) {
       return;
     }
     if (socket) {
-      socket.emit("message", { message: inputValue, name });
+      socket.emit("message", {
+        message: inputValue,
+        userId: socket.id,
+        userName,
+      });
       setInputValue("");
       scrollToBottom();
     }
   };
 
+  const reactToMessage = (messageId: string) => {
+    if (socket) {
+      socket.emit("reactToMessage", { messageId, userId: socket.id });
+    }
+  };
+
+  if (!socket) {
+    return null;
+  }
+
   return (
-    <div className="container">
-      <p>Welcome, {name}</p>
-      <p>Room size: {userCount}</p>
-      <div className="messages" ref={chatRoomRef}>
-        {messages.map((message, index) => {
-          const { type } = message;
-          const isOwnMessage = name === message.name;
-          console.log("isOwnMessage ", isOwnMessage);
-          const msgContainerClass = clsx("message", {
-            left: !isOwnMessage,
-            right: isOwnMessage,
-          });
-          const msgClassName = clsx("message-body", {
-            "connect-msg": type === "connected",
-            "disconnect-msg": type === "disconnected",
-            "own-message": isOwnMessage && type === "msg",
-            "other-message": !isOwnMessage && type === "msg",
-            "own-bubble": isOwnMessage && type === "msg",
-            "other-bubble": !isOwnMessage && type === "msg",
-          });
-          return (
-            <div key={index} className={msgContainerClass}>
-              <div className="message-header">{message.name}</div>
-              <div className={msgClassName}>{message.message}</div>
-            </div>
-          );
-        })}
+    <React.Fragment>
+      <div className="container">
+        <p>Welcome, {userName}</p>
+        <p>Room size: {userList.length}</p>
+        {userList && userList.length > 0 && (
+          <p>
+            Active users: {[...userList].map((user) => user.name).join(", ")}
+          </p>
+        )}
+        <div className="messages" ref={chatRoomRef}>
+          {messages.map((message, index) => {
+            const { reactions } = message;
+            const getName = (userId: string) => {
+              const user = [...userList].find((user) => user.id === userId);
+              return user?.name;
+            };
+
+            const likes = reactions
+              ?.map((userId) => getName(userId))
+              .filter(Boolean);
+
+            return (
+              <Message
+                key={message.id}
+                message={message}
+                likes={likes}
+                socketId={socket.id}
+                reactToMessage={reactToMessage}
+              />
+            );
+          })}
+        </div>
+        <div className="input-container">
+          <form onSubmit={sendMessage}>
+            <textarea
+              className="input"
+              value={inputValue}
+              minLength={0}
+              maxLength={10000}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <button
+              className="button"
+              disabled={!inputValue || inputValue.length > 10000}
+              type="submit"
+            >
+              Send
+            </button>
+            <button className="button button-red" onClick={handleLeave}>
+              Leave
+            </button>
+          </form>
+        </div>
       </div>
-      <div className="input-container">
-        <form onSubmit={sendMessage}>
-          <textarea
-            className="input"
-            value={inputValue}
-            minLength={0}
-            maxLength={10000}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <button
-            className="button"
-            disabled={!inputValue || inputValue.length > 10000}
-            type="submit"
-          >
-            Send
-          </button>
-          <button className="button button-red" onClick={handleLeave}>
-            Leave
-          </button>
-        </form>
-      </div>
-    </div>
+    </React.Fragment>
   );
 };
 

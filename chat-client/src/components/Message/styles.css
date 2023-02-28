@@ -1,0 +1,95 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  max-width: 300px;
+  word-wrap: break-word;
+  max-width: 70%;
+}
+
+.message-header {
+  font-weight: bold;
+  color: black;
+  display: flex;
+}
+
+.message-body {
+  text-align: left;
+}
+
+.own-message {
+  display: inline-block;
+  background-color: #0275d8;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 60%;
+}
+
+.other-message {
+  display: inline-block;
+  float: left;
+  background-color: #e9ecef;
+  color: black;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 60%;
+}
+
+.left {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.disconnect-msg {
+  color: red;
+}
+
+.connect-msg {
+  color: green;
+}
+
+.reactions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.reaction-icon {
+  color: black;
+  margin-right: 5px;
+  font-size: 18px;
+}
+
+.reaction-count {
+  margin-left: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+}
+
+.liked {
+  color: red;
+}
+
+.liked-by-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+}
+
+.liked-by-header {
+  margin: 0;
+}

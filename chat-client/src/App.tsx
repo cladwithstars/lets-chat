@@ -5,13 +5,13 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 
 function App() {
-  const [name, setName] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   return (
     <BrowserRouter>
-      <div className="App">
+      <div>
         <Routes>
-          <Route path="/" element={<Connect setUsername={setName} />} />
-          <Route path="/chatroom" element={<Chat name={name} />} />
+          <Route path="/" element={<Connect setUserName={setUserName} />} />
+          <Route path="/chatroom" element={<Chat userName={userName} />} />
         </Routes>
       </div>
     </BrowserRouter>
