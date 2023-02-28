@@ -1,25 +1,25 @@
-import express from "express";
-import http from "http";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
-import { Server, Socket } from "socket.io";
+const express = require("express");
+const http = require("http");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+const { Server, Socket } = require("socket.io");
 
-interface User {
-  id: string;
-  name: string;
-}
+// interface User {
+//   id: string;
+//   name: string;
+// }
 
-interface Message {
-  id: string;
-  userId: string;
-  userName: string | number;
-  message: string;
-  type: "msg" | "connected" | "disconnected";
-  reactions: String[];
-}
+// interface Message {
+//   id: string;
+//   userId: string;
+//   userName: string | number;
+//   message: string;
+//   type: "msg" | "connected" | "disconnected";
+//   reactions: String[];
+// }
 
-const messages: Message[] = [];
-let users: User[] = [];
+const messages = [];
+let users = [];
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -30,8 +30,8 @@ const io = new Server(httpServer, {
   },
 });
 
-io.on("connection", (socket: Socket) => {
-  socket.on("user connected", (name: string) => {
+io.on("connection", (socket) => {
+  socket.on("user connected", (name) => {
     users.push({ id: socket.id, name });
     io.emit("userList", [...users]);
     socket.broadcast.emit(
@@ -64,40 +64,26 @@ io.on("connection", (socket: Socket) => {
     );
   });
 
-  socket.on(
-    "message",
-    ({
-      message,
+  socket.on("message", ({ message, userId, userName }) => {
+    const msg = {
+      id: uuidv4(),
       userId,
       userName,
-    }: {
-      message: string;
-      userId: string;
-      userName: string;
-    }) => {
-      const msg: Message = {
-        id: uuidv4(),
-        userId,
-        userName,
-        message,
-        type: "msg",
-        reactions: [],
-      };
-      messages.push(msg);
-      io.emit("message", JSON.stringify(msg));
-    }
-  );
+      message,
+      type: "msg",
+      reactions: [],
+    };
+    messages.push(msg);
+    io.emit("message", JSON.stringify(msg));
+  });
 
-  socket.on(
-    "reactToMessage",
-    ({ messageId, userId }: { messageId: string; userId: string }) => {
-      const message = messages.find((message) => message.id === messageId);
-      if (message) {
-        message.reactions?.push(userId);
-        io.emit("reaction", { messageId, userId });
-      }
+  socket.on("reactToMessage", ({ messageId, userId }) => {
+    const message = messages.find((message) => message.id === messageId);
+    if (message) {
+      message.reactions?.push(userId);
+      io.emit("reaction", { messageId, userId });
     }
-  );
+  });
 });
 
 // serve static assets in production
