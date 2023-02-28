@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import LikesModal from "../LikesModal/LikesModal";
-import "./styles.css";
 import { Message as MessageType } from "../../types";
 import useChatRoom from "../../hooks/useChatRoom";
+import "./styles.css";
 
 interface Props {
   message: MessageType;
@@ -51,22 +50,23 @@ const Message: React.FC<Props> = ({
       {type === "msg" && reactions.length > 0 && (
         <div
           className={clsx("reactions", { liked: isLikedByUser })}
-          onClick={() => setShowModal(!showModal)}
+          onClick={() => {
+            setShowModal(!showModal);
+          }}
         >
           <i className={clsx("fas fa-heart", { liked: isLikedByUser })}></i>
           <span className="reaction-count">{reactions.length}</span>
         </div>
       )}
-      {showModal ? (
-        <LikesModal onClose={() => setShowModal(false)}>
-          <h6 className="liked-by-header">Liked By:</h6>
+      {showModal && (
+        <div>
           <ul className="liked-by-list">
             {likes.map((name) => {
               return <li key={name}>{name}</li>;
             })}
           </ul>
-        </LikesModal>
-      ) : null}
+        </div>
+      )}
     </div>
   );
 };

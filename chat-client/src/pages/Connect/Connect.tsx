@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import { Button } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import logo from "../../assets/logo.png";
 import "./styles.css";
 
 interface Props {
@@ -22,10 +26,13 @@ const Connect: React.FC<Props> = ({ setUserName }) => {
   };
 
   return (
-    <div className="connect-container">
-      <h1>Let's Chat</h1>
-      <form onSubmit={handleSubmitName}>
-        <input
+    <Container className="text-center">
+      <img src={logo} className="img-fluid"></img>
+      <Form
+        onSubmit={handleSubmitName}
+        className="d-flex flex-column align-items-center"
+      >
+        <Form.Control
           className="connect-input"
           type="text"
           value={name}
@@ -35,11 +42,16 @@ const Connect: React.FC<Props> = ({ setUserName }) => {
           placeholder="Your name"
           ref={inputRef}
         />
-        <button className="connect-button" disabled={!name} type="submit">
+        <Button
+          className="w-100 mt-3 bg-pink border-0"
+          style={{ backgroundColor: "teal" }}
+          disabled={!name}
+          type="submit"
+        >
           Join
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </Container>
   );
 };
 

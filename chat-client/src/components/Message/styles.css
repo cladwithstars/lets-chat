@@ -80,6 +80,7 @@
 
 .liked-by-list {
   list-style: none;
+  color: black;
   margin: 0;
   padding: 0;
   font-size: 12px;
@@ -90,4 +91,5 @@
 
 .liked-by-header {
   margin: 0;
+  font-size: 12;
 }

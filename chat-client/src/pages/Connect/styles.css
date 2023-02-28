@@ -1,4 +1,4 @@
-.connect-container {
+/* .connect-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,7 +41,7 @@
 .connect-button:not([disabled]):hover {
   background-color: #ff5db1;
   transform: scale(1.1);
-}
+} */
 
 h1 {
   color: white;

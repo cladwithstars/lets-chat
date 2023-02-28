@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Connect from "./pages/Connect/Connect";
 import Chat from "./pages/Chat/Chat";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
 

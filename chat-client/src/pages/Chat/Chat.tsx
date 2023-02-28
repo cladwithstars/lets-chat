@@ -3,6 +3,8 @@ import useChatRoom from "../../hooks/useChatRoom";
 import Message from "../../components/Message/Message";
 import UsersModal from "../../components/UsersModal/UsersModal";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
 import "./styles.css";
 
 interface Props {
@@ -16,6 +18,7 @@ const Chat: React.FC<Props> = ({ userName }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const chatRoomRef = useRef<HTMLDivElement>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showTip, setShowTip] = useState(true);
 
   useEffect(() => {
     if (!userName) {
@@ -64,7 +67,7 @@ const Chat: React.FC<Props> = ({ userName }) => {
   }
 
   return (
-    <React.Fragment>
+    <Container>
       <UsersModal
         users={userList}
         isOpen={modalIsOpen}
@@ -120,10 +123,23 @@ const Chat: React.FC<Props> = ({ userName }) => {
             <button className="button button-red" onClick={handleLeave}>
               Leave
             </button>
+            {showTip && (
+              <div>
+                Tip: double click a message to 'like'. Click the heart to see
+                the likes. (
+                <button
+                  className="view-users"
+                  onClick={() => setShowTip(false)}
+                >
+                  hide
+                </button>
+                )
+              </div>
+            )}
           </form>
         </div>
       </div>
-    </React.Fragment>
+    </Container>
   );
 };
 
